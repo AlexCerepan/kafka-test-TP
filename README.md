@@ -13,14 +13,6 @@
   * [Install Docker](#install-docker)
   * [Clone this repository](#clone-this-repository)
   * [Change into the repository directory](#change-into-the-repository-directory)
-* [Run Kpow Community Edition (optional)](#run-kpow-community-edition-optional)
-* [Run a simple Kafka cluster (no authentication)](#run-a-simple-kafka-cluster-no-authentication)
-  * [Start the Kafka cluster](#start-the-kafka-cluster)
-  * [Stop the Kafka cluster](#stop-the-kafka-cluster)
-  * [Access the Kafka cluster](#access-the-kafka-cluster)
-    * [Localhost bootstrap](#localhost-bootstrap)
-    * [Docker host bootstrap](#docker-host-bootstrap)
-    * [host.docker.internal bootstrap](#hostdockerinternal-bootstrap)
 * [Run a SASL Kafka cluster (with authentication)](#run-a-sasl-kafka-cluster-with-authentication)
   * [Client authentication](#client-authentication)
 * [License](#license) 
@@ -35,107 +27,6 @@ Two types of Kafka Cluster are supported, simple (no authentication) and SASL au
 
 See [kpow-local](https://github.com/factorhouse/kpow-local) for a more complex local configuration consisting of Kpow, Kafka, Schema, Connect, and ksqlDB.
 
-## Prerequisites
-
-### Install Docker
-
-The local cluster runs with Docker Compose, so you will need to [install Docker](https://www.docker.com/).
-
-Once Docker is installed, clone this repository and run the following commands from the base path.
-
-### Clone this repository
-
-```
-git clone git@github.com:factorhouse/kafka-local.git
-```
-
-### Change into the repository directory
-
-```
-cd kafka-local
-```
-
-## Run Kpow Community Edition (Optional)
-
-The community edition of Kpow for Apache Kafka is free to use by individuals and organisations.
-
-You can check it out if you like, but the configuration in this repository doesn't require Kpow in any way.
-
-![Kpow UI](/resources/img/kpow-overview.png)
-
-Start a local Kafka cluster with the configuration in this repository then:
-
-* Get a [free Kpow Community license](https://factorhouse.io/kpow/community/)
-* Enter the license details into [resoources/kpow/no-auth.env](resources/kpow/no-auth.env) or [resoources/kpow/sasl-auth.env](resources/kpow/sasl-auth.env)
-* Start Kpow Community Edition:
-
-**Start Kpow Community Edition with No Auth Kafka Cluster**
-
-```
-docker run --network=kafka-local_default -p 3000:3000 -m2G --env-file ./resources/kpow/no-auth.env factorhouse/kpow-ce:latest
-```
-
-**Start Kpow Community Edition with SASL Auth Kafka Cluster**
-
-```
-docker run --network=kafka-local_default -p 3000:3000 -m2G --env-file ./resources/kpow/sasl-auth.env factorhouse/kpow-ce:latest
-```
-
-* Navigate to http://localhost:3000 (the UI might look empty until you start creating topics and writing data)
-
-## Run a simple Kafka cluster (no authentication)
-
-### Start the Kafka cluster
-
-This command starts a Kafka Cluster that does not require clients to authenticate.
-
-```bash
-docker compose -f docker-compose-no-auth.yml up
-```
-
-```
-[+] Running 5/5
- ✔ Network kafka-local_default      Created0.0s
- ✔ Container zookeeper              Created0.0s
- ✔ Container kafka-local-kafka-3-1  Created0.0s
- ✔ Container kafka-local-kafka-1-1  Created0.0s
- ✔ Container kafka-local-kafka-2-1  Created0.0s
-Attaching to kafka-1-1, kafka-2-1, kafka-3-1, zookeeper
-zookeeper  | ===> User
-zookeeper  | uid=1000(appuser) gid=1000(appuser) groups=1000(appuser)
-zookeeper  | ===> Configuring ...
-```
-
-### Stop the Kafka cluster
-
-First, hit ctrl-c in the terminal running the Docker Compose process.
-
-```bash
-^C
-Gracefully stopping... (press Ctrl+C again to force)
-[+] Stopping 4/4
- ✔ Container kafka-local-kafka-1-1  Stopped5.8s
- ✔ Container kafka-local-kafka-2-1  Stopped0.7s
- ✔ Container kafka-local-kafka-3-1  Stopped0.7s
- ✔ Container zookeeper              Stopped0.5s
-canceled
-```
-
-Then stop/clear the Docker Compose resources
-
-```
-docker compose -f docker-compose-no-auth.yml down
-```
-
-```
-[+] Running 5/0
- ✔ Container kafka-local-kafka-1-1  Removed                                                                                                                                                                    0.0s
- ✔ Container kafka-local-kafka-2-1  Removed                                                                                                                                                                    0.0s
- ✔ Container kafka-local-kafka-3-1  Removed                                                                                                                                                                    0.0s
- ✔ Container zookeeper              Removed                                                                                                                                                                    0.0s
- ✔ Network kafka-local_default      Removed
-```
- 
 ### Access the Kafka cluster
 
 To access this cluster you can:
