@@ -29,6 +29,7 @@ services:
       KAFKA_AUTHORIZER_CLASS_NAME: kafka.security.authorizer.AclAuthorizer
       KAFKA_AUTO_CREATE_TOPICS_ENABLE: 'true'
       KAFKA_SUPER_USERS: User:admin
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
       KAFKA_SASL_ENABLED_MECHANISMS: PLAIN
       KAFKA_SASL_MECHANISM_INTER_BROKER_PROTOCOL: PLAIN
       KAFKA_OPTS: -Djava.security.auth.login.config=/etc/kafka/secrets/kafka_jaas.conf
@@ -36,6 +37,7 @@ services:
       - zookeeper
     volumes:
       - ./resources/docker:/etc/kafka/secrets
+      - kafka_data:/var/lib/kafka/data
 
   kafka-init:
     image: confluentinc/cp-kafka:7.7.0
@@ -55,3 +57,7 @@ services:
         target: /init/auto-create-kafka-topics.sh
       - ./resources/docker/client.properties:/etc/kafka/secrets/client.properties
     init: true
+
+volumes:
+  kafka_data:
+    driver: local
